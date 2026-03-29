@@ -1,6 +1,8 @@
 import psutil as ps
+import detection_engine as deng
 
 for process in ps.process_iter():
+    pid = None
     try:
         pid = process.pid
         name = process.name()
@@ -10,7 +12,10 @@ for process in ps.process_iter():
         else:
             cmd_str = " ".join(map(str, cmd))
 
-        print(f"PID: {pid} | Name: {name} | CMD: {cmd_str}\n")
+        is_suspicious, comment = deng.detect_suspicious(name, cmd_str)
+        if is_suspicious:
+            print(f"PID: {pid} | Name: {name} | CMD: {cmd_str}")
+            print(f"[!] {comment}")
     except (ps.AccessDenied, ps.NoSuchProcess):
-        print(f"PID: {process.pid} | Access denied or process has ended")
+        print(f"PID: {pid} | Access denied or process has ended")
 
