@@ -48,7 +48,7 @@ class BehaviourDetector:
         self.time_threshold = 5
         self.max_events = 3
 
-    def process(self, command, start_time):
+    def detect(self, command, start_time):
         if command not in self.cmd_tracked:
             self.cmd_tracked[command] = []
         timestamps = self.cmd_tracked[command]
